@@ -1,0 +1,154 @@
+Classe Abstrata Robô 
+
+public abstract class Robo {
+    protected String nome;
+    protected int pontos;
+
+    // Construtor da classe base
+    public Robo(String nome) {
+        this.nome = nome;
+        this.pontos = 0;
+    }
+
+    // Método abstrato que será implementado pelas subclasses
+    public abstract void competir();
+
+    // Métodos getters para nome e pontos
+    public String getNome() {
+        return nome;
+    }
+
+    public int getPontos() {
+        return pontos;
+    }
+    
+    // Método para definir os pontos
+    public void setPontos(int pontos) {
+        this.pontos = pontos;
+    }
+}
+
+Classe RoboNavegacao
+public class RoboNavegacao extends Robo {
+
+    public RoboNavegacao(String nome) {
+        super(nome);
+    }
+
+    // Implementação do método competir para navegação
+    @Override
+    public void competir() {
+        System.out.println(nome + " está competindo na arena de navegação.");
+        // Simula pontuação baseada no tempo gasto para completar o labirinto
+        pontos = (int) (Math.random() * 100);
+        System.out.println(nome + " terminou o labirinto com " + pontos + " pontos.");
+    }
+}
+
+Classe RoboColeta
+public class RoboColeta extends Robo {
+
+    public RoboColeta(String nome) {
+        super(nome);
+    }
+
+    // Implementação do método competir para coleta
+    @Override
+    public void competir() {
+        System.out.println(nome + " está competindo na arena de coleta.");
+        // Simula pontuação baseada na quantidade de objetos coletados
+        pontos = (int) (Math.random() * 100);
+        System.out.println(nome + " coletou objetos e ganhou " + pontos + " pontos.");
+    }
+}
+
+Classe RoboCombate
+
+public class RoboCombate extends Robo {
+
+    public RoboCombate(String nome) {
+        super(nome);
+    }
+
+    // Implementação do método competir para combate
+    @Override
+    public void competir() {
+        System.out.println(nome + " está competindo na arena de combate.");
+        // Simula pontuação baseada em acertos no oponente
+        pontos = (int) (Math.random() * 100);
+        System.out.println(nome + " atingiu os oponentes e ganhou " + pontos + " pontos.");
+    }
+}
+
+Classe Competicao 
+
+import java.util.*;
+
+public class Competicao {
+    private List<Robo> robos;
+    private Map<Robo, Integer> ranking;
+
+    public Competicao() {
+        this.robos = new ArrayList<>();
+        this.ranking = new HashMap<>();
+    }
+
+    // Registrar robôs na competição
+    public void registrarRobo(Robo robo) {
+        robos.add(robo);
+        System.out.println("Robô " + robo.getNome() + " registrado na competição.");
+    }
+
+    // Iniciar uma rodada onde cada robô compete
+    public void iniciarRodada() {
+        System.out.println("\nIniciando rodada de competição...");
+        for (Robo robo : robos) {
+            robo.competir();
+            ranking.put(robo, robo.getPontos());
+        }
+    }
+
+    // Calcular e mostrar o ranking final da competição
+    public void calcularRanking() {
+        System.out.println("\nCalculando o ranking final...");
+        ranking.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEach(entry -> System.out.println(entry.getKey().getNome() + ": " + entry.getValue() + " pontos"));
+    }
+}
+
+Classe Main
+
+public class Main {
+    public static void main(String[] args) {
+        // Criando uma instância da competição
+        Competicao competicao = new Competicao();
+
+        // Criando robôs de diferentes tipos
+        Robo robo1 = new RoboNavegacao("Robo Navegador");
+        Robo robo2 = new RoboColeta("Robo Coletor");
+        Robo robo3 = new RoboCombate("Robo Combatente");
+
+        // Registrando os robôs na competição
+        competicao.registrarRobo(robo1);
+        competicao.registrarRobo(robo2);
+        competicao.registrarRobo(robo3);
+
+        // Iniciando a rodada de competição
+        competicao.iniciarRodada();
+
+        // Calculando e mostrando o ranking final
+        competicao.calcularRanking();
+    }
+}
+
+Exemplo Visual
+
+CompeticaoRobos/
+│
+├── Robo.java
+├── RoboNavegacao.java
+├── RoboColeta.java
+├── RoboCombate.java
+├── Competicao.java
+└── Main.java
